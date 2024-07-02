@@ -67,22 +67,22 @@ endfunction
 augroup LineCommentConfig
     autocmd!
     " C
-    autocmd BufNewFile,BufRead,BufEnter *.c,*.h,*.c.inc setlocal filetype=c
-    autocmd FileType c xnoremap <silent> ^_ :<c-u>call <sid>MultiLineComment('//')<cr>
-    autocmd FileType c nnoremap <silent> ^_ :call <sid>SingleLineComment('//')<cr>
+    autocmd BufNewFile,BufRead,BufEnter *.c,*.h,*.c.inc,*.cpp,*.hpp setlocal filetype=c
+    autocmd FileType c,cpp xnoremap <silent>  :<c-u>call <sid>MultiLineComment('//')<cr>
+    autocmd FileType c,cpp nnoremap <silent>  :call <sid>SingleLineComment('//')<cr>
     " Vim
     autocmd BufNewFile,BufRead,BufEnter *.vim,*.vimrc setlocal filetype=vim
-    autocmd FileType vim xnoremap <silent> ^_ :<c-u>call <sid>MultiLineComment('"')<cr>
-    autocmd FileType vim nnoremap <silent> ^_ :call <sid>SingleLineComment('"')<cr>
-    " Bash, Make, Python
+    autocmd FileType vim xnoremap <silent>  :<c-u>call <sid>MultiLineComment('"')<cr>
+    autocmd FileType vim nnoremap <silent>  :call <sid>SingleLineComment('"')<cr>
+    " Bash, Make, CMake, Python
     autocmd BufNewFile,BufRead,BufEnter *.sh setlocal filetype=sh
     autocmd BufNewFile,BufRead,BufEnter Makefile* setlocal filetype=make
     autocmd BufNewFile,BufRead,BufEnter *.py setlocal filetype=python
-    autocmd FileType gdb,make,sh,python xnoremap <silent> ^_ :<c-u>call <sid>MultiLineComment('#')<cr>
-    autocmd FileType gdb,make,sh,python nnoremap <silent> ^_ :call <sid>SingleLineComment('#')<cr>
-    autocmd BufNewFile,BufRead,BufEnter *.sh setlocal filetype=sh
+    autocmd BufNewFile,BufRead,BufEnter CMakeLists* setlocal filetype=cmake
+    autocmd FileType gdb,make,cmake,sh,python xnoremap <silent>  :<c-u>call <sid>MultiLineComment('#')<cr>
+    autocmd FileType gdb,make,cmake,sh,python nnoremap <silent>  :call <sid>SingleLineComment('#')<cr>
     " Lua
     autocmd BufNewFile,BufRead,BufEnter *.lua setlocal filetype=lua
-    autocmd FileType lua xnoremap <silent> ^_ :<c-u>call <sid>MultiLineComment('--')<cr>
-    autocmd FileType lua nnoremap <silent> ^_ :call <sid>SingleLineComment('--')<cr>
+    autocmd FileType lua xnoremap <silent>  :<c-u>call <sid>MultiLineComment('--')<cr>
+    autocmd FileType lua nnoremap <silent>  :call <sid>SingleLineComment('--')<cr>
 augroup END
