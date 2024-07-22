@@ -18,8 +18,9 @@ let g:line_comment_map = '<C-_>'
 let g:line_comment_extra_sign = ' '
 let g:line_comment_tabstop = &tabstop
 let g:line_comment_extra_table = [
-    \ ['', ],
-    \ [],
+    \ ['vb',  ''''''],
+    \ ['awk', '#'],
+    \ ['sed', '#'],
 \ ]
 augroup MyAugroup
     autocmd BufNewFile,BufRead,BufEnter *.c.inc setlocal filetype=c
