@@ -1,18 +1,18 @@
 # vim-line-comment
 Line comment for vim
 
-## Plug Install
+## Install
 ```vim
 Plug 'shaobosong/vim-line-comment'
 ```
 
-## Plug Global Variables Notes
+## Global Variables
 - `g:line_comment_map`: Shortcut key mapping in normal and visual mode. (Default: `'<C-_>'`)
-- `g:line_comment_extra_sign`: Single filled sign between comment sign and effective expression. (Default: `' '`)
-- `g:line_comment_tabstop`: Indent. (Default: `&tabstop`)
-- `g:line_comment_extra_table`: User custom table including filetypes and comment signs.
+- `g:line_comment_extra_sign`: Extra sign will be filled multiply between comment signs and effective expression. (Default: `' '`)
+- `g:line_comment_tabstop`: Find a good position placed comment signs. (Default: `&tabstop`)
+- `g:line_comment_extra_table`: Extra table including different filetypes and comment signs.
 
-## Plug Usages
+## Usage
 ```vim
 let g:line_comment_map = '<C-_>'
 let g:line_comment_extra_sign = ' '
