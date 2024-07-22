@@ -1,4 +1,61 @@
 " Line comment for any languages.
+if exists('g:loaded_line_comment')
+    finish
+endif
+let g:loaded_line_comment = 1
+
+if !exists('g:line_comment_map')
+    let g:line_comment_map = '<C-_>'
+endif
+
+if !exists('g:line_comment_extra_sign')
+    let g:line_comment_extra_sign = ' '
+endif
+
+if !exists('g:line_comment_tabstop')
+    let g:line_comment_tabstop = &tabstop
+endif
+
+let s:line_comment_table = [
+    \ ['vim',          '"'],
+    \ ['c',            '//'],
+    \ ['cpp',          '//'],
+    \ ['cs',           '//'],
+    \ ['go',           '//'],
+    \ ['rust',         '//'],
+    \ ['java',         '//'],
+    \ ['javascript',   '//'],
+    \ ['php',          '//'],
+    \ ['swift',        '//'],
+    \ ['kotlin',       '//'],
+    \ ['typescript',   '//'],
+    \ ['sh',           '#'],
+    \ ['zsh',          '#'],
+    \ ['fish',         '#'],
+    \ ['gdb',          '#'],
+    \ ['perl',         '#'],
+    \ ['ruby',         '#'],
+    \ ['make',         '#'],
+    \ ['cmake',        '#'],
+    \ ['python',       '#'],
+    \ ['tmux',         '#'],
+    \ ['meson',        '#'],
+    \ ['ssh_config',   '#'],
+    \ ['sshd_config',  '#'],
+    \ ['systemd',      '#'],
+    \ ['tcl',          '#'],
+    \ ['ada',          '--'],
+    \ ['lua',          '--'],
+    \ ['haskell',      '--'],
+    \ ['vhdl',         '--'],
+    \ ['erlang',       '%'],
+    \ ['prolog',       '%'],
+\ ]
+
+if exists('g:line_comment_extra_table')
+    call extend(s:line_comment_table, g:line_comment_extra_table)
+endif
+
 function! s:LineComment(r0, r1, sign, extra_sign, align)
     let l:need_sign = v:false
     let l:indent = 999
@@ -47,42 +104,17 @@ function! s:LineComment(r0, r1, sign, extra_sign, align)
 endfunction
 
 function! s:SingleLineComment(sign)
-    call s:LineComment(".", ".", a:sign, ' ', &tabstop)
+    call s:LineComment(".", ".", a:sign, g:line_comment_extra_sign, g:line_comment_tabstop)
 endfunction
 
 function! s:MultiLineComment(sign)
-    call s:LineComment("'<", "'>", a:sign, ' ', &tabstop)
+    call s:LineComment("'<", "'>", a:sign, g:line_comment_extra_sign, g:line_comment_tabstop)
 endfunction
 
-function! s:SingleLineComment(sign)
-    call s:LineComment(".", ".", a:sign, ' ', &tabstop)
-endfunction
-
-function! s:MultiLineComment(sign)
-    call s:LineComment("'<", "'>", a:sign, ' ', &tabstop)
-endfunction
-
-" Examples
-" Typing ^_ by <C-v><C-/>
-augroup LineCommentConfig
+augroup LineCommentAugroup
     autocmd!
-    " C
-    autocmd BufNewFile,BufRead,BufEnter *.c,*.h,*.c.inc,*.cpp,*.hpp setlocal filetype=c
-    autocmd FileType c,cpp xnoremap <silent>  :<c-u>call <sid>MultiLineComment('//')<cr>
-    autocmd FileType c,cpp nnoremap <silent>  :call <sid>SingleLineComment('//')<cr>
-    " Vim
-    autocmd BufNewFile,BufRead,BufEnter *.vim,*.vimrc setlocal filetype=vim
-    autocmd FileType vim xnoremap <silent>  :<c-u>call <sid>MultiLineComment('"')<cr>
-    autocmd FileType vim nnoremap <silent>  :call <sid>SingleLineComment('"')<cr>
-    " Bash, Make, CMake, Python
-    autocmd BufNewFile,BufRead,BufEnter *.sh setlocal filetype=sh
-    autocmd BufNewFile,BufRead,BufEnter Makefile* setlocal filetype=make
-    autocmd BufNewFile,BufRead,BufEnter *.py setlocal filetype=python
-    autocmd BufNewFile,BufRead,BufEnter CMakeLists* setlocal filetype=cmake
-    autocmd FileType gdb,make,cmake,sh,python xnoremap <silent>  :<c-u>call <sid>MultiLineComment('#')<cr>
-    autocmd FileType gdb,make,cmake,sh,python nnoremap <silent>  :call <sid>SingleLineComment('#')<cr>
-    " Lua
-    autocmd BufNewFile,BufRead,BufEnter *.lua setlocal filetype=lua
-    autocmd FileType lua xnoremap <silent>  :<c-u>call <sid>MultiLineComment('--')<cr>
-    autocmd FileType lua nnoremap <silent>  :call <sid>SingleLineComment('--')<cr>
+    for [filetypes, commsigns] in s:line_comment_table
+        execute 'autocmd FileType ' . filetypes . ' nnoremap <silent> ' . g:line_comment_map . ' :call <sid>SingleLineComment(''' . commsigns . ''')<CR>'
+        execute 'autocmd FileType ' . filetypes . ' xnoremap <silent> ' . g:line_comment_map . ' :<C-U>call <sid>MultiLineComment(''' . commsigns . ''')<CR>'
+    endfor
 augroup END
