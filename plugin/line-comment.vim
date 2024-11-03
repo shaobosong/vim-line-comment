@@ -113,8 +113,8 @@ endfunction
 
 augroup LineCommentAugroup
     autocmd!
-    for [filetypes, commsigns] in s:line_comment_table
-        execute 'autocmd FileType ' . filetypes . ' nnoremap <silent> ' . g:line_comment_map . ' :call <sid>SingleLineComment(''' . commsigns . ''')<CR>'
-        execute 'autocmd FileType ' . filetypes . ' xnoremap <silent> ' . g:line_comment_map . ' :<C-U>call <sid>MultiLineComment(''' . commsigns . ''')<CR>'
+    for [_filetype, _commsigns] in s:line_comment_table
+        execute 'autocmd FileType ' . _filetype . ' nnoremap <silent> ' . g:line_comment_map . ' :call <sid>SingleLineComment(''' . _commsigns . ''')<CR>'
+        execute 'autocmd FileType ' . _filetype . ' xnoremap <silent> ' . g:line_comment_map . ' :<C-U>call <sid>MultiLineComment(''' . _commsigns . ''')<CR>'
     endfor
 augroup END
