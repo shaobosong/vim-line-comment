@@ -16,50 +16,50 @@ if !exists('g:line_comment_tabstop')
     let g:line_comment_tabstop = &tabstop
 endif
 
-let s:line_comment_table = [
-    \ ['vim',          '"'],
-    \ ['c',            '//'],
-    \ ['cpp',          '//'],
-    \ ['cs',           '//'],
-    \ ['go',           '//'],
-    \ ['rust',         '//'],
-    \ ['java',         '//'],
-    \ ['javascript',   '//'],
-    \ ['php',          '//'],
-    \ ['swift',        '//'],
-    \ ['kotlin',       '//'],
-    \ ['typescript',   '//'],
-    \ ['sh',           '#'],
-    \ ['zsh',          '#'],
-    \ ['fish',         '#'],
-    \ ['gdb',          '#'],
-    \ ['perl',         '#'],
-    \ ['ruby',         '#'],
-    \ ['make',         '#'],
-    \ ['cmake',        '#'],
-    \ ['python',       '#'],
-    \ ['tmux',         '#'],
-    \ ['meson',        '#'],
-    \ ['ssh_config',   '#'],
-    \ ['sshd_config',  '#'],
-    \ ['systemd',      '#'],
-    \ ['tcl',          '#'],
-    \ ['ada',          '--'],
-    \ ['lua',          '--'],
-    \ ['haskell',      '--'],
-    \ ['vhdl',         '--'],
-    \ ['erlang',       '%'],
-    \ ['prolog',       '%'],
-\ ]
+let s:line_comment_table = {
+            \ 'vim':        '"',
+            \ 'c':          '//',
+            \ 'cpp':        '//',
+            \ 'cs':         '//',
+            \ 'go':         '//',
+            \ 'rust':       '//',
+            \ 'java':       '//',
+            \ 'javascript': '//',
+            \ 'php':        '//',
+            \ 'swift':      '//',
+            \ 'kotlin':     '//',
+            \ 'typescript': '//',
+            \ 'sh':         '#',
+            \ 'zsh':        '#',
+            \ 'fish':       '#',
+            \ 'gdb':        '#',
+            \ 'perl':       '#',
+            \ 'ruby':       '#',
+            \ 'make':       '#',
+            \ 'cmake':      '#',
+            \ 'python':     '#',
+            \ 'tmux':       '#',
+            \ 'meson':      '#',
+            \ 'sshconfig':  '#',
+            \ 'sshdconfig': '#',
+            \ 'systemd':    '#',
+            \ 'tcl':        '#',
+            \ 'ada':        '--',
+            \ 'lua':        '--',
+            \ 'haskell':    '--',
+            \ 'vhdl':       '--',
+            \ 'erlang':     '%',
+            \ 'prolog':     '%',
+            \ }
 
 if exists('g:line_comment_extra_table')
-    call extend(s:line_comment_table, g:line_comment_extra_table)
+    call extend(s:line_comment_table, g:line_comment_extra_table, "force")
 endif
 
 function! s:LineComment(r0, r1, sign, extra_sign, align)
     let l:need_sign = v:false
     let l:indent = 999
-    for l:lnr in range(line(a:r0), line(a:r1))
+    for l:lnr in range(a:r0, a:r1)
         let l:line = getline(l:lnr)
         if len(l:line) == 0
             continue
@@ -70,7 +70,7 @@ function! s:LineComment(r0, r1, sign, extra_sign, align)
     " Round indent down to nearest multiple. Requires that align be a power of 2.
     let l:indent = and(l:indent, -a:align)
     " Prepend or remove signs.
-    for l:lnr in range(line(a:r0), line(a:r1))
+    for l:lnr in range(a:r0, a:r1)
         let l:line = getline(l:lnr)
         if len(l:line) == 0
             continue
@@ -103,18 +103,17 @@ function! s:LineComment(r0, r1, sign, extra_sign, align)
     endfor
 endfunction
 
-function! s:SingleLineComment(sign)
-    call s:LineComment(".", ".", a:sign, g:line_comment_extra_sign, g:line_comment_tabstop)
+function! s:LineCommentToggle(line1, line2)
+    let l:sign = get(s:line_comment_table, &filetype, '#')
+    call s:LineComment(a:line1, a:line2, l:sign, g:line_comment_extra_sign, g:line_comment_tabstop)
 endfunction
 
-function! s:MultiLineComment(sign)
-    call s:LineComment("'<", "'>", a:sign, g:line_comment_extra_sign, g:line_comment_tabstop)
-endfunction
+command! -nargs=0 -range LineCommentToggle call s:LineCommentToggle(<line1>,<line2>)
 
-augroup LineCommentAugroup
-    autocmd!
-    for [_filetype, _commsigns] in s:line_comment_table
-        execute 'autocmd FileType ' . _filetype . ' nnoremap <silent> ' . g:line_comment_map . ' :call <sid>SingleLineComment(''' . _commsigns . ''')<CR>'
-        execute 'autocmd FileType ' . _filetype . ' xnoremap <silent> ' . g:line_comment_map . ' :<C-U>call <sid>MultiLineComment(''' . _commsigns . ''')<CR>'
-    endfor
-augroup END
+nnoremap <silent> <Plug>LineCommentToggle :LineCommentToggle<CR>
+xnoremap <silent> <Plug>LineCommentToggle :LineCommentToggle<CR>
+
+execute 'nnoremap <silent> ' . g:line_comment_map . ' <Plug>LineCommentToggle'
+execute 'xnoremap <silent> ' . g:line_comment_map . ' <Plug>LineCommentToggle'
+
+" vim: set sw=4 ts=4 sts=4 et ft=vim:
