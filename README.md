@@ -2,6 +2,7 @@
 Line comment for vim
 
 ## Install
+- vim-plug
 ```vim
 Plug 'shaobosong/vim-line-comment'
 ```
@@ -15,7 +16,7 @@ Plug 'shaobosong/vim-line-comment'
 ## Usage
 ### Configuration in vimrc
 ```vim
-let g:line_comment_map = '<C-_>' " Ctrl+/
+let g:line_comment_map = '<C-_>'
 let g:line_comment_extra_sign = ' '
 let g:line_comment_tabstop = &tabstop
 let g:line_comment_extra_table = {
@@ -24,7 +25,7 @@ let g:line_comment_extra_table = {
     \ 'sed':    '#',
     \ 'conf':   '#',
     \ }
-augroup MyAugroup
+augroup LineCommentAugroup
     autocmd BufNewFile,BufRead,BufEnter *.c.inc setlocal filetype=c
 augroup END
 ```
