@@ -47,6 +47,7 @@ let s:line_comment_table = {
             \ 'awk':        '#',
             \ 'sed':        '#',
             \ 'conf':       '#',
+            \ 'dosbatch':   '::',
             \ }
 
 if exists('g:line_comment_extra_table')
