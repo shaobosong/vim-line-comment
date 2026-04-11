@@ -11,7 +11,7 @@ Plug 'shaobosong/vim-line-comment'
 - `g:line_comment_map`: Shortcut key mapping in normal and visual mode. (Default: `'<C-_>'`, i.e. `Ctrl+/`)
 - `g:line_comment_extra_sign`: Extra sign will be filled multiply between comment signs and effective expression. (Default: `' '`)
 - `g:line_comment_tabstop`: Find a good position placed comment signs. (Default: `&tabstop`)
-- `g:line_comment_extra_table`: Extra table including different filetypes and comment signs.
+- `g:line_comment_extra_table`: Extra table including different filetypes and comment signs. Values may be a string like `'//'` or a dict like `{'left': '<!--', 'right': '-->'}`.
 
 ## Usage
 ### Configuration in vimrc
@@ -24,6 +24,7 @@ let g:line_comment_extra_table = {
     \ 'awk':    '#',
     \ 'sed':    '#',
     \ 'conf':   '#',
+    \ 'html':   {'left': '<!--', 'right': '-->'},
     \ }
 augroup LineCommentAugroup
     autocmd BufNewFile,BufRead,BufEnter *.c.inc setlocal filetype=c
@@ -37,5 +38,4 @@ augroup END
 ```
 
 ## Todo
-- Support `xml` language
 - Support block comments
